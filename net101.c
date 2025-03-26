@@ -2,15 +2,20 @@
 #include <ifaddrs.h>
 #include <errno.h>
 
+void setup_ifa_list(struct ifaddrs **ifa) 
+{
+    if (getifaddrs(ifa) == -1) {
+        perror("getifaddrs() failed");
+        exit(1);
+    }
+}
+
 int main(void)
 {
     struct ifaddrs *ifa;
-    if (getifaddrs(&ifa) == -1) {
-        perror("getifaddrs() failed");
-        return 1;
-    }
-    struct ifaddrs *iterator;
+    setup_ifa_list(&ifa);
 
+    struct ifaddrs *iterator;
     puts("");
     int ifa_counter = 0;
     for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
