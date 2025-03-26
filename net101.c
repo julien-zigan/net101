@@ -10,18 +10,20 @@ void setup_ifa_list(struct ifaddrs **ifa)
     }
 }
 
-int main(void)
+void print_ifa_names(struct ifaddrs *ifa)
 {
-    struct ifaddrs *ifa;
-    setup_ifa_list(&ifa);
-
     struct ifaddrs *iterator;
-    puts("");
     int ifa_counter = 0;
     for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
         printf("%2d.\t%s\n", ++ifa_counter, iterator->ifa_name);
     }
-    puts("");
+}
+
+int main(void)
+{
+    struct ifaddrs *ifa;
+    setup_ifa_list(&ifa);
+    print_ifa_names(ifa);
 
     freeifaddrs(ifa);
     printf("Test: OK\n");
