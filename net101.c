@@ -19,7 +19,6 @@ void setup_ifa_list(struct ifaddrs **ifa)
 
 void print_ifa_names(struct ifaddrs *ifa)
 {
-
     NAME *name_set;
     name_set = (NAME *)malloc(sizeof(NAME));
     if (name_set == NULL) {
@@ -54,6 +53,11 @@ void print_ifa_names(struct ifaddrs *ifa)
             }
             printf("%4d. %s\n", ++ifa_counter, iterator->ifa_name);
         }
+    }
+    while (name_set) {
+        NAME *tmp = name_set;
+        name_set = name_set->next;
+        free(tmp);
     }
     printf("\n");
 }
