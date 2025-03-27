@@ -54,10 +54,12 @@ void print_ifa_names(struct ifaddrs *ifa)
             new->next = name_set;
             name_set = new;
             if (headline == 0) {
-                printf("\nInterface Names:\n\n");
+                printf("\n%6s%-10s\t%s\n","", "Name", "Flags");
+                printf("%6s__________________________\n\n", "");
                 headline = 1;
             }
-            printf("%4d. %s\n", ++ifa_counter, iterator->ifa_name);
+            printf("%4d. %-10s\t%u\n", ++ifa_counter, iterator->ifa_name,
+                   iterator->ifa_flags);
         }
     }
     freenames(name_set);
