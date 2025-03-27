@@ -27,12 +27,18 @@ void freenames(NAME *name_set)
     }
 }
 
+void setup_name_set(NAME **name_set) 
+{
+    NAME *tmp = (NAME *)malloc(sizeof(NAME));
+    assert(tmp);
+    tmp->next = NULL;
+    *name_set = tmp;
+}
+
 void print_ifa_names(struct ifaddrs *ifa)
 {
     NAME *name_set;
-    name_set = (NAME *)malloc(sizeof(NAME));
-    assert(name_set);
-    name_set->next = NULL;
+    setup_name_set(&name_set);
     struct ifaddrs *iterator;
     NAME *name_it;
     int ifa_counter = 0;
