@@ -1,14 +1,10 @@
+#include "net101.h"
 #include <stdio.h>
 #include <ifaddrs.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-
-typedef struct name {
-    struct name *next;
-    char name[32];
-} NAME;
 
 void setup_ifa_list(struct ifaddrs **ifa) 
 {
@@ -66,13 +62,4 @@ void print_ifa_names(struct ifaddrs *ifa)
     }
     freenames(name_set);
     printf("\n");
-}
-
-int main(void)
-{
-    struct ifaddrs *ifa;
-    setup_ifa_list(&ifa);
-    print_ifa_names(ifa);
-    freeifaddrs(ifa);
-    return 0;
 }

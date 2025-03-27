@@ -1,0 +1,17 @@
+
+#ifndef __NET101_H__
+#define __NET101_H__
+
+#include <ifaddrs.h>
+
+typedef struct name {
+    struct name *next;
+    char name[32];
+} NAME;
+
+extern void setup_ifa_list(struct ifaddrs **ifa);
+extern void freenames(NAME *name_set);
+extern void setup_name_set(NAME **name_set);
+extern void print_ifa_names(struct ifaddrs *ifa);
+
+#endif
