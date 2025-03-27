@@ -17,6 +17,15 @@ void setup_ifa_list(struct ifaddrs **ifa)
     }
 }
 
+void freenames(NAME *name_set)
+{
+    while (name_set) {
+        NAME *tmp = name_set;
+        name_set = name_set->next;
+        free(tmp);
+    }
+}
+
 void print_ifa_names(struct ifaddrs *ifa)
 {
     NAME *name_set;
@@ -54,11 +63,7 @@ void print_ifa_names(struct ifaddrs *ifa)
             printf("%4d. %s\n", ++ifa_counter, iterator->ifa_name);
         }
     }
-    while (name_set) {
-        NAME *tmp = name_set;
-        name_set = name_set->next;
-        free(tmp);
-    }
+    freenames(name_set);
     printf("\n");
 }
 
