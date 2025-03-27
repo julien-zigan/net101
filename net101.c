@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 typedef struct name {
     struct name *next;
@@ -30,10 +31,7 @@ void print_ifa_names(struct ifaddrs *ifa)
 {
     NAME *name_set;
     name_set = (NAME *)malloc(sizeof(NAME));
-    if (name_set == NULL) {
-        printf("Mem alloc failed\n");
-        exit(2);
-    }
+    assert(name_set);
     name_set->next = NULL;
     struct ifaddrs *iterator;
     NAME *name_it;
@@ -49,10 +47,7 @@ void print_ifa_names(struct ifaddrs *ifa)
         }
         if (add2set) {
             NAME *new = (NAME *)malloc(sizeof(NAME));
-            if (new == NULL) {
-                printf("Mem alloc failed\n");
-                exit(2);
-            }
+            assert(new);
             strncpy(new->name, iterator->ifa_name, sizeof(new->name));
             new->next = name_set;
             name_set = new;
