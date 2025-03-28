@@ -54,7 +54,9 @@ void print_ifa_names(struct ifaddrs *ifa)
             new->next = name_set;
             name_set = new;
             if (headline == 0) {
-                printf("\nInterface Names:\n\n");
+                printf("\n%6s%-10s\n","", "Name");
+                printf("%6s_____\n\n", "");
+                /*printf("\nInterface Names:\n\n");*/
                 headline = 1;
             }
             printf("%4d. %s\n", ++ifa_counter, iterator->ifa_name);
@@ -114,11 +116,11 @@ void print_ifa_flags(struct ifaddrs *ifa)
     int ifa_counter = 0;
     int headline = 0;
     char flagbuffer[128] = {'\0'};
-    printf("\n%6s%-10s\t%s\n","", "Name", "Flags");
-    printf("%6s__________________________\n\n", "");
+    printf("\n%6s%-10s %s\n","", "Name", "Flags");
+    printf("%6s%-10s %s\n\n", "","_____", "______");
     for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
         flags2human(flagbuffer, iterator->ifa_flags); 
-        printf("%4d. %-10s\t%s\n", ++ifa_counter, iterator->ifa_name,
+        printf("%4d. %-10s %s\n", ++ifa_counter, iterator->ifa_name,
                    flagbuffer);
         strcpy(flagbuffer, "");
     }
