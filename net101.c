@@ -31,6 +31,39 @@ void setup_name_set(NAME **name_set)
     *name_set = tmp;
 }
 
+void print_ifa_names(struct ifaddrs *ifa)
+{
+    NAME *name_set;
+    setup_name_set(&name_set);
+    struct ifaddrs *iterator;
+    NAME *name_it;
+    int ifa_counter = 0;
+    int headline = 0;
+    for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
+        int add2set = 1;
+        for (name_it = name_set; name_it; name_it = name_it->next) {
+            if (strcmp(name_it->name, iterator->ifa_name) == 0) {
+                add2set = 0;
+                break;
+            }
+        }
+        if (add2set) {
+            NAME *new = (NAME *)malloc(sizeof(NAME));
+            assert(new);
+            strncpy(new->name, iterator->ifa_name, sizeof(new->name));
+            new->next = name_set;
+            name_set = new;
+            if (headline == 0) {
+                printf("\nInterface Names:\n\n");
+                headline = 1;
+            }
+            printf("%4d. %s\n", ++ifa_counter, iterator->ifa_name);
+        }
+    }
+    freenames(name_set);
+    printf("\n");
+}
+
 /* flags defined in linux/if.h */
 void flags2human(char *buffer, unsigned int flags) {
     unsigned int f;
@@ -74,7 +107,7 @@ void flags2human(char *buffer, unsigned int flags) {
         strcat(buffer, "echo ");
 }
 
-void print_ifa_names(struct ifaddrs *ifa)
+void print_ifa_flags(struct ifaddrs *ifa)
 {
     struct ifaddrs *iterator;
     NAME *name_it;
