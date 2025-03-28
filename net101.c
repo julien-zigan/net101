@@ -30,6 +30,7 @@ void setup_name_set(NAME **name_set)
     tmp->next = NULL;
     *name_set = tmp;
 }
+
 /* flags defined in linux/if.h */
 void flags2human(char *buffer, unsigned int flags) {
     unsigned int f;
