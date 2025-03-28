@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
 
 void setup_ifa_list(struct ifaddrs **ifa) 
 {
