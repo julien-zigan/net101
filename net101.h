@@ -15,5 +15,6 @@ extern void setup_name_set(NAME **name_set);
 extern void print_ifa_names(struct ifaddrs *ifa);
 extern void print_ifa_flags(struct ifaddrs *ifa);
 extern void flags2human(char *buffer, unsigned int flags);
+extern void print_address_familiy(struct ifaddrs *ifa);
 
 #endif

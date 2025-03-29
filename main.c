@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
         print_help(argv);
         break;
     }
-    
+ print_address_familiy(ifa);   
 cleanup:
     freeifaddrs(ifa);
 
