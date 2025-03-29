@@ -1,7 +1,7 @@
 CC = gcc
 TEST = -o test 
 SRC = net101.c main.c
-PROD = -o ifnames
+PROD = -o ifxplore 
 
 all: test
 	./test
