@@ -126,3 +126,21 @@ void print_ifa_flags(struct ifaddrs *ifa)
     }
     printf("\n");
 }
+
+void print_address_family(struct ifaddrs *ifa) 
+{
+    struct ifaddrs *iterator;
+    NAME *name_it;
+    int ifa_counter = 0;
+    int headline = 0;
+    //char flagbuffer[128] = {'\0'};
+    printf("\n%6s%-10s %s\n","", "Name", "Address Family");
+    printf("%6s%-10s %s\n\n", "","_____", "_______________");
+    for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
+        //flags2human(flagbuffer, iterator->ifa_flags); 
+        printf("%4d. %-10s %u\n", ++ifa_counter, iterator->ifa_name,
+                   iterator->ifa_addr->sa_family);
+        //strcpy(flagbuffer, "");
+    }
+    printf("\n");
+}
