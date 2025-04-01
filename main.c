@@ -14,7 +14,7 @@ char usage[] =
     "\n"
     "Options:\n"
     "-N\tlist interface names only\n"
-    "-F\tlist al network interfaces with ther address families"
+    "-F\tlist al network interfaces with ther address families\n"
     "-h\tshow this help menu\n"
     "\n";
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct ifaddrs *ifa;
 
     setup_ifa_list(&ifa);
-    opt = getopt(argc, argv, "nFh");
+    opt = getopt(argc, argv, "NFh");
     
     if ((opt == -1 && argc > 1) || argc > 2) {
         print_help(argv);
