@@ -1,6 +1,7 @@
 #include "net101.h"
 #include <stdio.h>
 #include <ifaddrs.h>
+#include <sys/socket.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -109,6 +110,58 @@ void flags2human(char *buffer, unsigned int flags) {
         strcat(buffer, "echo ");
 }
 
+void af2human(char *buff, int af) 
+{
+    switch (af) {
+        case PF_UNSPEC        : {strcpy(buff, "UNSPEC")    ; break;    };
+        case PF_LOCAL	        : {strcpy(buff, "LOCAL")	 ; break;  };
+        case PF_INET		    : {strcpy(buff, "IPv4"  ) 	 ; break;  };
+        case PF_AX25		    : {strcpy(buff, "AX25"  ) 	 ; break;  };
+        case PF_IPX		    : {strcpy(buff, "IPX"   ) 	 ; break;      };
+        case PF_APPLETALK     : {strcpy(buff, "APPLETALK") ; break;    };
+        case PF_NETROM	    : {strcpy(buff, "NETROM")	 ; break;      };
+        case PF_BRIDGE	    : {strcpy(buff, "BRIDGE")	 ; break;      };
+        case PF_ATMPVC	    : {strcpy(buff, "ATMPVC")	 ; break;      };
+        case PF_X25		    : {strcpy(buff, "X25"   ) 	 ; break;      };
+        case PF_INET6	        : {strcpy(buff, "IPv6" )     ; break;  };
+        case PF_ROSE		    : {strcpy(buff, "ROSE"  ) 	 ; break;  };
+        case PF_DECnet	    : {strcpy(buff, "DECnet")	 ; break;      };
+        case PF_NETBEUI	    : {strcpy(buff, "NETBEUI")	 ; break;      };
+        case PF_SECURITY	    : {strcpy(buff, "SECURITY")	 ; break;  };
+        case PF_KEY		    : {strcpy(buff, "KEY"   ) 	 ; break;      };
+        case PF_NETLINK	    : {strcpy(buff, "NETLINK")	 ; break;      };
+        case PF_PACKET	    : {strcpy(buff, "PACKET")	 ; break;      };
+        case PF_ASH		    : {strcpy(buff, "ASH"   ) 	 ; break;      };
+        case PF_ECONET	    : {strcpy(buff, "ECONET")	 ; break;      };
+        case PF_ATMSVC	    : {strcpy(buff, "ATMSVC")    ; break;      };
+        case PF_RDS		    : {strcpy(buff, "RDS"   ) 	 ; break;      };
+        case PF_SNA		    : {strcpy(buff, "SNA"   ) 	 ; break;      };
+        case PF_IRDA		    : {strcpy(buff, "IRDA"  ) 	 ; break;  };
+        case PF_PPPOX	        : {strcpy(buff, "PPPOX" )    ; break;  };
+        case PF_WANPIPE	    : {strcpy(buff, "WANPIPE")	 ; break;      };
+        case PF_LLC		    : {strcpy(buff, "LLC"   ) 	 ; break;      };
+        case PF_IB		    : {strcpy(buff, "IB"	   ) ; break;      };
+        case PF_MPLS		    : {strcpy(buff, "MPLS"  ) 	 ; break;  };
+        case PF_CAN		    : {strcpy(buff, "CAN"   ) 	 ; break;      };
+        case PF_TIPC		    : {strcpy(buff, "TIPC"  ) 	 ; break;  };
+        case PF_BLUETOOTH     : {strcpy(buff, "BLUETOOTH") ; break;    };
+        case PF_IUCV		    : {strcpy(buff, "IUCV"  ) 	 ; break;  };
+        case PF_RXRPC	        : {strcpy(buff, "RXRPC" )    ; break;  };
+        case PF_ISDN		    : {strcpy(buff, "ISDN"  ) 	 ; break;  };
+        case PF_PHONET	    : {strcpy(buff, "PHONET")	 ; break;      };
+        case PF_IEEE802154    : {strcpy(buff, "IEEE80215") ; break;    };
+        case PF_CAIF		    : {strcpy(buff, "CAIF"  ) 	 ; break;  };
+        case PF_ALG		    : {strcpy(buff, "ALG"   ) 	 ; break;      };
+        case PF_NFC		    : {strcpy(buff, "NFC"   ) 	 ; break;      };
+        case PF_VSOCK	        : {strcpy(buff, "VSOCK" )    ; break;  };
+        case PF_KCM		    : {strcpy(buff, "KCM"   ) 	 ; break;      };
+        case PF_QIPCRTR	    : {strcpy(buff, "QIPCRTR")	 ; break;      };
+        case PF_SMC		    : {strcpy(buff, "SMC"   ) 	 ; break;      };
+        case PF_XDP		    : {strcpy(buff, "XDP"   ) 	 ; break;      };
+        case PF_MCTP		    : {strcpy(buff, "MCTP"  ) 	 ; break;  };
+    }
+}
+
 void print_ifa_flags(struct ifaddrs *ifa)
 {
     struct ifaddrs *iterator;
@@ -127,20 +180,21 @@ void print_ifa_flags(struct ifaddrs *ifa)
     printf("\n");
 }
 
+
+
 void print_address_family(struct ifaddrs *ifa) 
 {
     struct ifaddrs *iterator;
     NAME *name_it;
     int ifa_counter = 0;
     int headline = 0;
-    //char flagbuffer[128] = {'\0'};
+    char afbuffer[16] = {'\0'};
     printf("\n%6s%-10s %s\n","", "Name", "Address Family");
     printf("%6s%-10s %s\n\n", "","_____", "_______________");
     for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
-        //flags2human(flagbuffer, iterator->ifa_flags); 
-        printf("%4d. %-10s %u\n", ++ifa_counter, iterator->ifa_name,
-                   iterator->ifa_addr->sa_family);
-        //strcpy(flagbuffer, "");
+        af2human(afbuffer, iterator->ifa_addr->sa_family);
+        printf("%4d. %-10s %s\n", ++ifa_counter, iterator->ifa_name,
+                   afbuffer);
     }
     printf("\n");
 }
