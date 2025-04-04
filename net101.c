@@ -180,8 +180,6 @@ void print_ifa_flags(struct ifaddrs *ifa)
     printf("\n");
 }
 
-
-
 void print_address_family(struct ifaddrs *ifa) 
 {
     struct ifaddrs *iterator;
