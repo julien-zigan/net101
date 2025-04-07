@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <ifaddrs.h>
 #include <sys/socket.h>
+#include <linux/in.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -197,6 +198,41 @@ void print_address_family(struct ifaddrs *ifa)
     printf("\n");
 }
 
+
+void ipv42human(char *buff, unsigned int addr)
+{
+    char byte[8] = {'\0'};
+    strcpy(buff, "");
+    int i;
+    for (i = 0; i < 4; i++) {
+        sprintf(byte, "%u", (addr>>(8*i)) & 255);
+        strcat(buff, byte);
+        strcat(buff, ".");
+    }
+    buff[strlen(buff) -1] = '\0';
+}
+
+void print_addr(struct ifaddrs *ifa)
+{
+    struct ifaddrs *iterator;
+    NAME *name_it;
+    int ifa_counter = 0;
+    int headline = 0;
+    char addrbuff[64] = {'\0'};
+    printf("\n%6s%-10s %s\n","", "Name", "Address");
+    printf("%6s%-10s %s\n\n", "","_____", "________");
+    for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
+        if (iterator->ifa_addr->sa_family == PF_INET) {
+            struct sockaddr_in *inaddr = (struct sockaddr_in *)iterator->ifa_addr;
+            struct in_addr sinaddr = inaddr->sin_addr;
+            ipv42human(addrbuff, sinaddr.s_addr);
+            printf("%4d. %-10s %s\n", ++ifa_counter, iterator->ifa_name,
+                       addrbuff);
+        }
+    }
+    printf("\n");
+}
+
 void print_all(struct ifaddrs *ifa)
 {
     struct ifaddrs *iterator;
@@ -204,14 +240,18 @@ void print_all(struct ifaddrs *ifa)
     int ifa_counter = 0;
     int headline = 0;
     char afbuffer[16] = {'\0'};
+    char addrbuff[64] = {'\0'};
     char flagbuffer[128] = {'\0'};
-    printf("\n%6s%-10s %-10s %s\n","", "Name", "Addr Fam", "Flags");
-    printf("%6s%-10s %-10s %s\n\n", "","_____", "_________", "______");
+    printf("\n%6s%-8s %-10s %-15s %s\n","", "Name", "Addr Fam","Address", "Flags");
+    printf("%6s%-8s %-10s %-15s %s\n\n", "","_____", "_________", "________", "______");
     for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
         af2human(afbuffer, iterator->ifa_addr->sa_family);
+        struct sockaddr_in *inaddr = (struct sockaddr_in *)iterator->ifa_addr;
+        struct in_addr sinaddr = inaddr->sin_addr;
+        ipv42human(addrbuff, sinaddr.s_addr);
         flags2human(flagbuffer, iterator->ifa_flags); 
-        printf("%4d. %-10s %-10s %s\n", ++ifa_counter, 
-               iterator->ifa_name, afbuffer, flagbuffer);
+        printf("%4d. %-8s %-10s %-15s %s\n", ++ifa_counter, 
+               iterator->ifa_name, afbuffer, strcmp(afbuffer, "IPv4") == 0 ? addrbuff : "", flagbuffer);
         strcpy(flagbuffer, "");
     }
     printf("\n");

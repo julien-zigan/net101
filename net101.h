@@ -18,5 +18,7 @@ extern void flags2human(char *buffer, unsigned int flags);
 extern void print_address_family(struct ifaddrs *ifa);
 extern void af2human(char *buff, int af);
 extern void print_all(struct ifaddrs *ifa);
+extern void print_addr(struct ifaddrs *ifa);
+extern void ipv42human(char *buff, unsigned int addr);
 
 #endif

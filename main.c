@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct ifaddrs *ifa;
 
     setup_ifa_list(&ifa);
-    opt = getopt(argc, argv, "NFfh");
+    opt = getopt(argc, argv, "NFfah");
     
     if ((opt == -1 && argc > 1) || argc > 2) {
         print_help(argv);
@@ -48,6 +48,9 @@ int main(int argc, char *argv[])
         break;
     case 'f':
         print_ifa_flags(ifa);
+        break;
+    case 'a':
+        print_addr(ifa);
         break;
     default:
         print_help(argv);
