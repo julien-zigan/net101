@@ -12,3 +12,6 @@ test: $(SRC)
 
 production: $(SRC)
 	$(CC) $(PROD) $(SRC)
+
+cleanup:
+	rm ifxplore
