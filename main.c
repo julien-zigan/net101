@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct ifaddrs *ifa;
 
     setup_ifa_list(&ifa);
-    opt = getopt(argc, argv, "NFh");
+    opt = getopt(argc, argv, "NFfh");
     
     if ((opt == -1 && argc > 1) || argc > 2) {
         print_help(argv);
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
     switch (opt) {
     case -1:
-        print_ifa_flags(ifa);
+        print_all(ifa);
         break;
     case 'N':
         print_ifa_names(ifa);
@@ -46,11 +46,13 @@ int main(int argc, char *argv[])
     case 'F':
         print_address_family(ifa);
         break;
+    case 'f':
+        print_ifa_flags(ifa);
+        break;
     default:
         print_help(argv);
         break;
     }
- print_address_familiy(ifa);   
 cleanup:
     freeifaddrs(ifa);
 

@@ -196,3 +196,24 @@ void print_address_family(struct ifaddrs *ifa)
     }
     printf("\n");
 }
+
+void print_all(struct ifaddrs *ifa)
+{
+    struct ifaddrs *iterator;
+    NAME *name_it;
+    int ifa_counter = 0;
+    int headline = 0;
+    char afbuffer[16] = {'\0'};
+    char flagbuffer[128] = {'\0'};
+    printf("\n%6s%-10s %-10s %s\n","", "Name", "Addr Fam", "Flags");
+    printf("%6s%-10s %-10s %s\n\n", "","_____", "_________", "______");
+    for (iterator = ifa; iterator; iterator = iterator->ifa_next) {
+        af2human(afbuffer, iterator->ifa_addr->sa_family);
+        flags2human(flagbuffer, iterator->ifa_flags); 
+        printf("%4d. %-10s %-10s %s\n", ++ifa_counter, 
+               iterator->ifa_name, afbuffer, flagbuffer);
+        strcpy(flagbuffer, "");
+    }
+    printf("\n");
+    
+}
